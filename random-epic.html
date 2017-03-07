@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Epic Deck Generator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label>Deck Size</label>
+            <input class="form-control" type="text" id="decksize" value="60" />
+        </div>
+        <div class="form-group col-md-2">
+            <span class="input-group-addon">
+                 Include Promos
+                 <input type="checkbox" id="promo" />
+            </span>
+            <button class="btn btn-default" id='cmdEnhance'>Make A Bad Deck</button>
+        </div>
+
+    </div>
+
+    <div class="row"><div class="form-group col-md-12">
+    </div></div>
+
+
+    <div class="row"><div class="form-group col-md-12">
+        <label>Cards</label>
+        <textarea id="decklist" rows="30" class="form-control"></textarea>
+    </div></div>
+
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#cmdEnhance').click( function() {
+
+            var decksize = parseInt($('#decksize').val());
+            var deckcount = 0;
+            var goldcount = {'G':0, 'E':0, 'W':0, 'S':0};
+            var silvercount = {'G':0, 'E':0, 'W':0, 'S':0};
+            var cardarray = ["Aftershock~P~W~1~W",
+                "Amnesia~C~S~0~W",
+                "Ancient Chant~C~S~1~W",
+                "Angel of Death~C~E~1~W",
+                "Angel of Light~C~G~1~R",
+                "Angel of Mercy~C~G~1~R",
+                "Angel of the Gate~U~G~1~W",
+                "Angelic Protector~C~G~1~W",
+                "Ankylosaurus~T~W~0~W",
+                "Apocalypse~C~E~1~W",
+                "Arcane Research~T~S~0~R",
+                "Army of the Apocalypse~C~E~1~R",
+                "Avenger of Covenant~U~G~1~R",
+                "Avenging Angel~C~G~1~W",
+                "Banishment~C~G~1~W",
+                "Battle Cry~T~W~1~R",
+                "Bellowing Minotaur~C~W~1~W",
+                "Bitten~C~E~1~W",
+                "Blind Faith~T~G~0~R",
+                "Blue Dragon~C~S~1~W",
+                "Bodyguard~U~G~0~W",
+                "Brachiosaurus~T~W~1~W",
+                "Brand, Rebel Fighter~U~G~0~R",
+                "Brave Squire~C~G~0~W",
+                "Burrowing Wurm~C~W~1~W",
+                "Cave Troll~C~W~0~W",
+                "Ceasefire~C~G~1~W",
+                "Chamberlain Kark~U~G~1~R",
+                "Chomp!~C~W~1~W",
+                "Citadel Raven~U~S~1~W",
+                "Citadel Scholar~U~S~0~W",
+                "Cleansing Light~P~G~1~R",
+                "Consume~U~E~0~W",
+                "Corpse Taker~C~E~0~R",
+                "Corpsemonger~U~E~0~R",
+                "Courageous Soul~C~G~0~R",
+                "Crystal Golem~C~S~1~W",
+                "Dark Assassin~C~E~1~W",
+                "Dark Knight~C~E~0~W",
+                "Dark Leader~C~E~1~W",
+                "Dark Offering~T~E~1~W",
+                "Dark Prince~P~E~1~W",
+                "Deadly Raid~C~S~1~R",
+                "Demon Breach~C~E~1~R",
+                "Demonic Rising~U~E~1~W",
+                "Den Mother~U~W~1~W",
+                "Divine Judgement~C~G~1~W",
+                "Djinn of the Sands~C~S~1~W",
+                "Drain Essence~C~E~1~W",
+                "Draka, Dragon Tyrant~T~W~1~R",
+                "Draka's Enforcer~T~W~1~W",
+                "Draka's Fire~T~W~1~W",
+                "Drinker of Blood~C~E~1~R",
+                "Elara, the Lycomancer~T~S~1~W",
+                "Elder Greatwurm~P~W~1~R",
+                "Entangling Vines~U~W~1~W",
+                "Erase~C~S~1~R",
+                "Erratic Research~U~S~1~W",
+                "Fairy Trickster~U~S~1~R",
+                "Faithful Pegasus~C~G~0~W",
+                "Feeding Frenzy~T~W~0~R",
+                "Feint~C~G~1~W",
+                "Final Task~C~E~1~W",
+                "Fire Shaman~C~W~0~W",
+                "Fire Spirit~T~W~0~W",
+                "Fireball~C~W~1~R",
+                "Fires of Rebellion~U~W~1~W",
+                "Flame Spike~U~W~0~W",
+                "Flame Strike~C~W~1~W",
+                "Flash Fire~C~W~0~W",
+                "Forbidden Research~P~E~1~R",
+                "Force Field~U~S~1~W",
+                "Forced Exile~T~G~1~W",
+                "Forcemage Apprentice~C~S~0~W",
+                "Forked Lightning~C~W~1~W",
+                "Frantic Digging~U~S~0~R",
+                "Frost Giant~C~S~1~R",
+                "Fumble~T~S~0~W",
+                "Gladius, the Defender~U~G~1~W",
+                "Go Wild~U~W~0~W",
+                "Gold Dragon~C~G~1~W",
+                "Grave Demon~U~E~1~W",
+                "Great Horned Lizard~T~W~1~W",
+                "Guilt Demon~C~E~0~W",
+                "Hands from Below~T~E~0~W",
+                "Hasty Retreat~C~S~0~W",
+                "Heinous Feast~T~E~0~W",
+                "Helion, the Dominator~T~S~1~R",
+                "Helion's Fury~T~S~1~W",
+                "High King~C~G~1~W",
+                "Hill Giant~P~W~0~W",
+                "Hunting Pack~U~W~1~W",
+                "Hunting Pterosaur~P~W~0~R",
+                "Hunting Raptors~C~W~1~W",
+                "Hurricane~C~W~1~W",
+                "Ice Drake~C~S~1~W",
+                "Infernal Gatekeeper~C~E~1~W",
+                "Inheritance of the Meek~C~G~1~W",
+                "Inner Demon~C~E~1~W",
+                "Inner Peace~C~G~1~W",
+                "Inspiration~P~S~0~R",
+                "Insurgency~T~G~1~W",
+                "Juggernaut~C~S~1~W",
+                "Jungle Queen~C~W~1~W",
+                "Justice Prevails~U~G~1~W",
+                "Kalnor`s Blessing~P~G~0~R",
+                "Keeper of Secrets~C~S~0~W",
+                "Keira, the Wolf Caller~P~W~1~R",
+                "Knight of Elara~U~G~0~W",
+                "Knight of Shadows~T~S~1~R",
+                "Knight of the Dawn~P~S~1~W",
+                "Kong~C~W~1~R",
+                "Lash~C~W~0~W",
+                "Lesson Learned~T~S~1~W",
+                "Lightning Storm~C~W~1~W",
+                "Lightning Strike~T~W~0~W",
+                "Little Devil~U~E~0~W",
+                "Lord of the Arena~C~G~1~R",
+                "Lurking Giant~C~W~1~W",
+                "Lying in Wait~C~S~1~W",
+                "Markus, Watch Captain~T~G~1~R",
+                "Martial Law~U~G~1~W",
+                "Master Zo~U~G~1~W",
+                "Medusa~C~E~1~W",
+                "Memory Spirit~C~S~1~R",
+                "Mighty Blow~C~W~1~W",
+                "Mist Guide Herald~T~S~1~W",
+                "Murderous Necromancer~C~E~1~R",
+                "Muse~C~S~0~W",
+                "Mythic Monster~U~W~1~W",
+                "Necromancer Apprentice~P~E~0~W",
+                "Necromancer Lord~C~E~1~W",
+                "Necrovirus~T~E~1~W",
+                "New Dawn~P~G~1~R",
+                "No Escape~U~E~1~R",
+                "Noble Martyr~T~G~1~W",
+                "Noble Unicorn~C~G~1~W",
+                "Ogre Mercenary~C~S~0~R",
+                "Owl Familiar~P~S~0~R",
+                "Pack Alpha~C~W~1~W",
+                "Palace Guard~C~G~1~W",
+                "Paros, Rebel Leader~T~G~0~W",
+                "Plague~C~E~1~R",
+                "Plague Zombies~U~E~1~W",
+                "Plentiful Dead~C~E~0~W",
+                "Priest of Kalnor~C~G~0~W",
+                "Priestess of Angeline~C~G~0~W",
+                "Psionic Assault~C~S~1~W",
+                "Pyromancer~C~W~1~R",
+                "Pyrosaur~U~W~1~W",
+                "Quell~T~G~1~W",
+                "Rabble Rouser~T~G~1~W",
+                "Rage~C~W~0~W",
+                "Raging T-Rex~C~W~1~W",
+                "Rain of Fire~C~W~1~R",
+                "Rally the People~C~G~0~W",
+                "Rampaging Wurm~C~W~1~W",
+                "Raxxa, Demon Tyrant~T~E~1~R",
+                "Raxxa's Curse~T~E~0~R",
+                "Raxxa's Displeasure~T~E~1~W",
+                "Raxxa's Enforcer~U~E~1~W",
+                "Reap or Sow~T~E~1~W",
+                "Reaper~T~E~1~W",
+                "Rescue Griffen~U~G~0~W",
+                "Reset~U~S~1~W",
+                "Resurrection~C~G~1~W",
+                "Reusable Knowledge~U~S~1~W",
+                "Revolt~T~G~0~W",
+                "Rift Summoner~U~E~1~W",
+                "Ritual Sacrifice~P~E~1~W",
+                "Royal Escort~T~G~1~R",
+                "Saren, Night Stalker~U~E~1~W",
+                "Savage Uprising~U~W~1~W",
+                "Scarros, Hound of Draka~U~W~1~R",
+                "Scrap Golem~P~S~1~R",
+                "Sea Hydra~C~W~1~R",
+                "Sea Titan~C~S~1~R",
+                "Searing Blast~P~W~1~W",
+                "Second Wind~T~G~0~W",
+                "Secret Legion~C~G~1~R",
+                "Shadow Imp~T~S~0~W",
+                "Silver Dragon~U~G~1~W",
+                "Siren's Song~U~S~0~W",
+                "Smash and Burn~T~W~1~W",
+                "Soul Hunter~C~E~1~W",
+                "Spawning Demon~T~E~0~W",
+                "Spike Trap~C~S~0~W",
+                "Spite~P~E~0~R",
+                "Spore Beast~U~W~0~R",
+                "Stand Alone~C~S~1~W",
+                "Standard Bearer~C~G~1~W",
+                "Steel Golem~C~S~1~W",
+                "Strafing Dragon~C~W~1~W",
+                "Succubus~C~E~1~W",
+                "Surprise Attack~C~W~1~R",
+                "Teleport~P~S~1~W",
+                "Temporal Enforcer~T~S~1~W",
+                "Temporal Shift~T~S~1~W",
+                "The Gudegon~T~E~1~W",
+                "The People's Champion~C~G~1~W",
+                "The Risen~C~E~1~W",
+                "Thought Plucker~C~S~1~W",
+                "Thrasher Demon~C~G~1~W",
+                "Thundarus~C~S~1~R",
+                "Time Bender~C~S~1~W",
+                "Time Master~P~S~1~R",
+                "Time Walker~C~S~1~W",
+                "Transform~C~E~0~W",
+                "Triceratops~C~W~1~W",
+                "Trihorror~C~E~1~W",
+                "Turn~C~S~1~W",
+                "Unquenchable Thirst~C~E~0~W",
+                "Urgent Messengers~T~G~1~W",
+                "Vampire Lord~C~E~1~W",
+                "Vanishing~T~S~0~W",
+                "Velden, Frost Titan~U~S~1~R",
+                "Village Protector~U~G~1~W",
+                "Vital Mission~C~G~1~W",
+                "War Machine~U~S~1~W",
+                "Warrior Angel~P~G~1~W",
+                "Warrior Golem~C~S~0~W",
+                "Watchful Gargoyle~C~G~0~W",
+                "Wave of Transformation~C~S~1~W",
+                "White Dragon~C~G~0~R",
+                "White Knight~C~G~1~W",
+                "Winds of Change~U~W~1~R",
+                "Winged Death~U~E~1~W",
+                "Winter Fairy~C~S~1~W",
+                "Wither~C~E~0~W",
+                "Wolf Companion~C~W~0~W",
+                "Wolf's Bite~T~W~0~W",
+                "Wolf's Call~C~W~1~W",
+                "Word of Summoning~C~E~0~R",
+                "Wurm Hatchling~C~W~0~R",
+                "Zannos, Corpse Lord~U~E~1~R",
+                "Zealous Necromancer~T~E~1~R",
+                "Zombie Apocalypse~C~E~1~W"];
+
+            var cards = cardarray.map(function(c){
+                var data = c.split('~');
+                return {
+                    name: data[0],
+                    set: data[1],
+                    faction: data[2],
+                    gold: data[3] === '1',
+                    red: data[4] === 'R',
+                    count: 0
+                }
+            });
+            var promo = $('#promo').prop('checked');
+
+
+            // loop  until decksize
+            while (decksize > deckcount) {
+                // get random Card
+                var rCard = cards[Math.floor(Math.random() * cards.length)];
+                // do we already have 3?
+                if (rCard.count < 3) {
+                    // is it legal (promo check)
+                    if (!(rCard.set === 'P' && !promo)) {
+                        // if silver, is there room?
+                        if (rCard.gold || goldcount[rCard.faction] >= (silvercount[rCard.faction] * 2)) {
+                            // add to deck, increase counts
+                            deckcount += 1;
+                            rCard.count += 1;
+                            if (rCard.gold) {
+                                goldcount[rCard.faction] += 1;
+                            } else {
+                                silvercount[rCard.faction] += 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            var textList = '';
+
+            // puke out the deck
+            cards.forEach(function(c, i){
+                if (c.count > 0) {
+                    textList += c.name + ' - x' + c.count.toString() + '\n';
+                }
+            });
+
+            $('#decklist').val(textList);
+
+        });
+
+    });
+</script>
+
+</body>
+</html>
